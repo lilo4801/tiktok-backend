@@ -1,5 +1,6 @@
 package com.example.tiktok.exceptions;
 
+import com.example.tiktok.models.responses.ResponseHandler;
 import com.example.tiktok.utils.LanguageUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +17,17 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUnwantedException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        return ResponseHandler.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
     }
 
     @ExceptionHandler({BadCredentialsException.class})
     public ResponseEntity<?> handleAuthorisedException(BadCredentialsException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
+        return ResponseHandler.generateFailureResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), null);
     }
 
     @ExceptionHandler({NotFoundException.class})  //
     public ResponseEntity<?> handleNotFoundException(NotFoundException e, WebRequest req) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        return ResponseHandler.generateFailureResponse(HttpStatus.NOT_FOUND, e.getMessage(), null);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})  //
@@ -38,8 +36,6 @@ public class GlobalExceptionHandler {
         e.getBindingResult().getFieldErrors().forEach(error -> {
             errors.put(error.getField(), error.getDefaultMessage());
         });
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorInputResponse(HttpStatus.BAD_REQUEST.value(), LanguageUtils.getMessage("message.validation.error"), errors));
+        return ResponseHandler.generateFailureResponse(HttpStatus.BAD_REQUEST, LanguageUtils.getMessage("message.validation.error"), errors);
     }
 }
