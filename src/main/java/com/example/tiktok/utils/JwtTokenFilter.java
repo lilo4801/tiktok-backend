@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.tiktok.common.HeaderElement;
 import com.example.tiktok.entities.CustomUserDetails;
 import com.example.tiktok.entities.Role;
 import com.example.tiktok.entities.User;
@@ -50,8 +51,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     private boolean hasAuthorizationBearer(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        if (ObjectUtils.isEmpty(header) || !header.startsWith("Bearer")) {
+        String header = request.getHeader(HeaderElement.AUTHORIZATION);
+        if (ObjectUtils.isEmpty(header) || !header.startsWith(HeaderElement.BEARER)) {
             return false;
         }
 
@@ -59,7 +60,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     private String getAccessToken(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
+        String header = request.getHeader(HeaderElement.AUTHORIZATION);
         String token = header.split(" ")[1].trim();
         return token;
     }

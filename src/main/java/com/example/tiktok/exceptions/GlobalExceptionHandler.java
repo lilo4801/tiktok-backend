@@ -1,4 +1,4 @@
-package com.example.tiktok.models.exceptions;
+package com.example.tiktok.exceptions;
 
 import com.example.tiktok.utils.LanguageUtils;
 import org.springframework.http.HttpStatus;
@@ -40,6 +40,6 @@ public class GlobalExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorInputResponse(HttpStatus.BAD_REQUEST.value(), "Validation Failed", errors));
+                .body(new ErrorInputResponse(HttpStatus.BAD_REQUEST.value(), LanguageUtils.getMessage("message.validation.error"), errors));
     }
 }

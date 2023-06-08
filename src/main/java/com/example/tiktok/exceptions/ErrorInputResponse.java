@@ -1,4 +1,4 @@
-package com.example.tiktok.models.exceptions;
+package com.example.tiktok.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,5 +12,5 @@ import java.util.Map;
 public class ErrorInputResponse {
     private Integer status;
     private String message;
-    private Map<String,String> details;
+    private Map<String, String> details;
 }

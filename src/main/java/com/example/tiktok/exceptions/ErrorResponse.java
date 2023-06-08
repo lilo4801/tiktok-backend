@@ -1,4 +1,4 @@
-package com.example.tiktok.models.exceptions;
+package com.example.tiktok.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

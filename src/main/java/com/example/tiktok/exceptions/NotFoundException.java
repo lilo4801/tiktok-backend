@@ -1,0 +1,7 @@
+package com.example.tiktok.exceptions;
+
+public class NotFoundException extends RuntimeException {
+    public NotFoundException(String message) {
+        super(message);
+    }
+}

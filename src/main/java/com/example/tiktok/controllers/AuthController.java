@@ -3,8 +3,7 @@ package com.example.tiktok.controllers;
 import javax.validation.Valid;
 
 import com.example.tiktok.entities.CustomUserDetails;
-import com.example.tiktok.entities.User;
-import com.example.tiktok.models.exceptions.NotFoundException;
+import com.example.tiktok.exceptions.NotFoundException;
 import com.example.tiktok.models.requests.AuthRequest;
 import com.example.tiktok.models.responses.AuthResponse;
 import com.example.tiktok.models.responses.UserInformationResponse;
@@ -16,8 +15,6 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 public class AuthController {

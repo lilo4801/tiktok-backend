@@ -1,6 +1,7 @@
 package com.example.tiktok.controllers;
 
 
+import com.example.tiktok.common.UserRole;
 import com.example.tiktok.entities.Product;
 import com.example.tiktok.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ProductController {
     private ProductRepository repo;
 
     @PostMapping
-    @RolesAllowed("ROLE_EDITOR")
+    @RolesAllowed(UserRole.ROLE_EDITOR)
     public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
         Product savedProduct = repo.save(product);
         URI productURI = URI.create("/products/" + savedProduct.getId());
@@ -27,7 +28,7 @@ public class ProductController {
     }
 
     @GetMapping
-    @RolesAllowed({"ROLE_CUSTOMER", "ROLE_EDITOR"})
+    @RolesAllowed({UserRole.ROLE_CUSTOMER, UserRole.ROLE_EDITOR})
     public List<Product> list() {
         return repo.findAll();
     }
