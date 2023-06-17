@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
+@MappedSuperclass
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "roles")
-public class Role {
+public class BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,21 +33,5 @@ public class Role {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = new Date();
-    }
-
-    @Column(nullable = false, length = 50, unique = true)
-    private String name;
-
-    public Role(String name) {
-        this.name = name;
-    }
-
-    public Role(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
     }
 }

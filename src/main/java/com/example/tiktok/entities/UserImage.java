@@ -1,18 +1,20 @@
 package com.example.tiktok.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "userimage")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "roles")
-public class Role {
+@Builder
+public class UserImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,19 +37,11 @@ public class Role {
         updatedAt = new Date();
     }
 
-    @Column(nullable = false, length = 50, unique = true)
     private String name;
+    private String type;
 
-    public Role(String name) {
-        this.name = name;
-    }
-
-    public Role(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
+    private String fileCode;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
