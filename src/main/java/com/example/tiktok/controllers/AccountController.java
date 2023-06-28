@@ -2,10 +2,12 @@ package com.example.tiktok.controllers;
 
 
 import com.example.tiktok.common.ImageFolder;
+import com.example.tiktok.models.requests.users.UpdateProfileRequest;
 import com.example.tiktok.models.requests.users.UploadImageRequest;
 import com.example.tiktok.models.responses.FileUploadResponse;
 import com.example.tiktok.models.responses.ResponseHandler;
 import com.example.tiktok.services.UserImageService;
+import com.example.tiktok.services.UserService;
 import com.example.tiktok.utils.FileDownloadUtil;
 import com.example.tiktok.utils.LanguageUtils;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -28,21 +31,25 @@ import java.io.IOException;
 public class AccountController {
 
     @Autowired
-    private UserImageService userImageService;
+    private UserService userService;
 
     private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
 
-    @PostMapping("/user/upload-image")
-    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile multipartFile
-            , @RequestParam("userId") Long userId) throws IOException {
+    @PostMapping("/user/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestParam("file") MultipartFile multipartFile,
+                                           @RequestParam("username") String username,
+                                           @RequestParam("nickname") String nickname,
+                                           @RequestParam("bio") String bio
+
+    ) throws IOException {
         LOGGER.info("Excuting controller");
-        FileUploadResponse res = userImageService.uploadImage(UploadImageRequest.builder()
-                .file(multipartFile)
-                .userId(userId).build()
-        );
+        userService.updateProfile(UpdateProfileRequest.builder()
+                .username(username)
+                .nickname(nickname)
+                .bio(bio).build(), multipartFile);
         LOGGER.info("Done executing controller");
-        return ResponseHandler.generateSuccessResponse(HttpStatus.CREATED, LanguageUtils.getMessage("message.successfully"), res);
+        return ResponseHandler.generateSuccessResponse(HttpStatus.OK, LanguageUtils.getMessage("message.successfully"), null);
 
     }
 

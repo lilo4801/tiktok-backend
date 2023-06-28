@@ -41,7 +41,6 @@ public class UserImageService {
 
         try {
             userImageRepository.save(UserImage.builder()
-                    .user(User.builder().id(req.getUserId()).build())
                     .type(req.getFile().getContentType())
                     .name(fileName)
                     .fileCode(filecode)

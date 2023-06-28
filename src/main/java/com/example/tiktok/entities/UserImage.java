@@ -41,7 +41,7 @@ public class UserImage {
     private String type;
 
     private String fileCode;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 }

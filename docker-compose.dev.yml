@@ -23,6 +23,8 @@ services:
       - 8080:8080
     volumes:
       - ./:/app
+      - app-logs:/app/logs
+      - images:/app/images
     networks:
       - backend
 #create network
@@ -32,3 +34,5 @@ networks:
 volumes:
   mysql-springboot-data:
   mysql-springboot-config-deamond:
+  app-logs:
+  images:

@@ -26,8 +26,8 @@ public class GlobalExceptionHandler {
         return ResponseHandler.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
     }
 
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<?> handleIOException(IOException e) {
+    @ExceptionHandler({IOException.class, LoginExeception.class})
+    public ResponseEntity<?> handleIOException(Exception e) {
         return ResponseHandler.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage(), null);
     }
 
