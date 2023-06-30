@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import com.example.tiktok.entities.CustomUserDetails;
 import com.example.tiktok.exceptions.LoginExeception;
-import com.example.tiktok.exceptions.NotFoundException;
 import com.example.tiktok.models.requests.AuthRequest;
 import com.example.tiktok.models.requests.users.SignUpRequest;
 import com.example.tiktok.models.responses.AuthResponse;
@@ -13,8 +12,7 @@ import com.example.tiktok.models.responses.UserInformationResponse;
 import com.example.tiktok.services.UserService;
 import com.example.tiktok.utils.JwtTokenUtil;
 import com.example.tiktok.utils.LanguageUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.authentication.*;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@Api(value = "User APIs")
 public class AuthController {
     @Autowired
     AuthenticationManager authManager;
@@ -32,10 +31,18 @@ public class AuthController {
     @Autowired
     UserService userService;
 
-    private static final Logger LOGGER = LogManager.getLogger(AuthController.class);
-
+    @ApiOperation(value = "Login", response = AuthResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Thành công"),
+            @ApiResponse(code = 401, message = "Chưa xác thực"),
+            @ApiResponse(code = 403, message = "Truy cập bị cấm"),
+            @ApiResponse(code = 404, message = "Không tìm thấy")
+    })
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
+    public ResponseEntity<?> login(
+            @RequestBody
+            @ApiParam(value = "auth information request", required = true)
+            @Valid AuthRequest request) {
         Authentication authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
@@ -49,6 +56,7 @@ public class AuthController {
 
     }
 
+
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody @Valid SignUpRequest request) {
         userService.register(request);
@@ -56,8 +64,17 @@ public class AuthController {
 
     }
 
+    @ApiOperation(value = "get current user", response = UserInformationResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Thành công"),
+            @ApiResponse(code = 401, message = "Chưa xác thực"),
+            @ApiResponse(code = 403, message = "Truy cập bị cấm"),
+            @ApiResponse(code = 404, message = "Không tìm thấy")
+    })
     @GetMapping("/auth/getMe")
-    public ResponseEntity<?> getMe(Authentication authentication) {
+    public ResponseEntity<?> getMe(
+            @ApiParam(value = "Đối tượng Authentication", required = true)
+            Authentication authentication) {
         if (authentication == null) throw new LoginExeception(LanguageUtils.getMessage("message.error.not.have.token"));
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         UserInformationResponse response = userService.getUserInformation(user.getUser().getId());

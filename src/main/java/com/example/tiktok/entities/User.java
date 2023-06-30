@@ -1,5 +1,9 @@
 package com.example.tiktok.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +23,13 @@ import java.util.Set;
 @Table(name = "users")
 @DynamicUpdate
 @Builder
+@ApiModel(value = "User model")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes = "The database generated User ID")
+    @JsonProperty("id")
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
