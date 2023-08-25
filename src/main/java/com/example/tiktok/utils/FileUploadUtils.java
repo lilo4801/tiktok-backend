@@ -1,5 +1,7 @@
 package com.example.tiktok.utils;
 
+import com.example.tiktok.models.dto.ImageDTO;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -8,13 +10,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-public class FileUploadUtil {
-    public static String saveFile(String fileName, MultipartFile multipartFile, String folder)
+public class FileUploadUtils {
+    public static ImageDTO saveFile(MultipartFile multipartFile, String folder)
             throws IOException {
+
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+
         Path uploadPath = Paths.get(folder);
 
         if (!Files.exists(uploadPath)) {
@@ -27,7 +32,13 @@ public class FileUploadUtil {
         Path filePath = uploadPath.resolve(fileCode + "-" + fileName);
         Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 
+        inputStream.close();
 
-        return fileCode;
+        return ImageDTO.builder()
+                .fileCode(fileCode)
+                .path(folder)
+                .name(fileName)
+                .type(multipartFile.getContentType())
+                .build();
     }
 }

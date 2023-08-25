@@ -1,9 +1,5 @@
 package com.example.tiktok.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-//import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,33 +17,10 @@ import java.util.Set;
 @Table(name = "users")
 @DynamicUpdate
 @Builder
-@ApiModel(value = "User model")
-public class User {
-
+public class User extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(notes = "The database generated User ID")
-    @JsonProperty("id")
     private Long id;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
-
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
@@ -83,7 +54,7 @@ public class User {
         this.roles.add(role);
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Collection<UserImage> userImages;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_image_id")
+    private Image avatar;
 }

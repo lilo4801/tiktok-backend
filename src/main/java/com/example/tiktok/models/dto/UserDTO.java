@@ -1,8 +1,5 @@
-package com.example.tiktok.models.responses;
+package com.example.tiktok.models.dto;
 
-import com.example.tiktok.entities.Role;
-import com.example.tiktok.models.dto.ImageDTO;
-import com.example.tiktok.models.dto.UserImageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,18 +11,12 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserInformationResponse {
-
+public class UserDTO {
     private Long id;
     private String username;
-
     private String nickname;
-
     private String bio;
     private String email;
-
-    private Set<Role> roles;
     private ImageDTO avatar;
-
 
 }

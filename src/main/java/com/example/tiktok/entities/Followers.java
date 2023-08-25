@@ -6,23 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
+@Entity
 @Data
+@Table(name = "followers")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "roles")
 @Builder
-public class Role {
+public class Followers extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "from_user_fk")
+    private User from;
 
-    @Column(nullable = false, length = 50, unique = true)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "to_user_fk")
+    private User to;
 
-    public Role(String name) {
-        this.name = name;
-    }
 }

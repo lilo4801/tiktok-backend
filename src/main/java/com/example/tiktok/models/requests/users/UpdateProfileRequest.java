@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
@@ -24,13 +25,7 @@ public class UpdateProfileRequest {
     @Length(max = 80)
     private String bio;
 
-
-    public User loadToEntity() {
-        return User.builder()
-                .bio(this.bio)
-                .nickname(this.nickname)
-                .username(this.username)
-                .build();
-    }
+    private MultipartFile file;
+    
 
 }

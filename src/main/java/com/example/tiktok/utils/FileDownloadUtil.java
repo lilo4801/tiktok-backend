@@ -11,12 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FileDownloadUtil {
     private Path foundFile;
 
     private static final Logger LOGGER = LogManager.getLogger(FileDownloadUtil.class);
-
 
     public Resource getFileAsResource(String fileCode, String folder) throws IOException {
         Path dirPath = Paths.get(folder);
@@ -29,8 +30,8 @@ public class FileDownloadUtil {
         });
 
         if (foundFile == null) {
-            LOGGER.error(LanguageUtils.getMessage("message.not-found"));
-            throw new NotFoundException(LanguageUtils.getMessage("message.not-found"));
+            LOGGER.error("message.not-found");
+            throw new NotFoundException("message.not-found");
         }
 
         return new UrlResource(foundFile.toUri());

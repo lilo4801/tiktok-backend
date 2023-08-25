@@ -21,13 +21,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where  u.id = :userId")
     List<User> findByUserId(@Param("userId") Long userId);
 
-    @Query("select u.id,u.nickname,u.username,u.email,u.bio," +
-            "ui.id as userImgageId,ui.name as imageName,ui.fileCode," +
-            "r.id as roleId,r.name as roleName from User u " +
-            "join u.userImages ui " +
-            "join u.roles r " +
-            "where  u.id = :userId")
-    List<Object[]> getInformationByUserId(@Param("userId") Long userId);
+//    @Query("select u.id,u.nickname,u.username,u.email,u.bio," +
+//            "ui.id as userImgageId,ui.name as imageName,ui.fileCode," +
+//            "r.id as roleId,r.name as roleName from User u " +
+//            "join u.userImages ui " +
+//            "join u.roles r " +
+//            "where  u.id = :userId")
+//    List<Object[]> getInformationByUserId(@Param("userId") Long userId);
 
 
 }

@@ -23,28 +23,29 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUnwantedException(Exception e) {
-        return ResponseHandler.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
-    }
-
-    @ExceptionHandler({IOException.class, LoginExeception.class})
-    public ResponseEntity<?> handleIOException(Exception e) {
-        return ResponseHandler.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage(), null);
-    }
-
-    @ExceptionHandler({BadCredentialsException.class})
-    public ResponseEntity<?> handleAuthorisedException(BadCredentialsException e) {
-        return ResponseHandler.generateFailureResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), null);
-    }
-
-    @ExceptionHandler({CreateFailureException.class})  //
-    public ResponseEntity<?> handleCreateFallException(CreateFailureException e) {
-        return ResponseHandler.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+        return ResponseHandler.generateFailureResponseWithDefaultMsg(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
     }
 
     @ExceptionHandler({DataAccessException.class})  //
     public ResponseEntity<?> handleSQLException(DataAccessException e) {
+        return ResponseHandler.generateFailureResponseWithDefaultMsg(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+    }
+
+    @ExceptionHandler({IOException.class, LoginExeception.class})
+    public ResponseEntity<?> handleIOException(Exception e) {
+        return ResponseHandler.generateFailureResponseWithDefaultMsg(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+    }
+
+    @ExceptionHandler({BadCredentialsException.class})
+    public ResponseEntity<?> handleAuthorisedException(BadCredentialsException e) {
+        return ResponseHandler.generateFailureResponseWithDefaultMsg(HttpStatus.UNAUTHORIZED, e.getMessage(), null);
+    }
+
+    @ExceptionHandler({CreateFailureException.class, UpdateFailtureException.class})  //
+    public ResponseEntity<?> handleCreateFallException(Exception e) {
         return ResponseHandler.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage(), null);
     }
+
 
     @ExceptionHandler({NotFoundException.class})  //
     public ResponseEntity<?> handleNotFoundException(Exception e) {
@@ -58,6 +59,6 @@ public class GlobalExceptionHandler {
         e.getBindingResult().getFieldErrors().forEach(error -> {
             errors.put(error.getField(), error.getDefaultMessage());
         });
-        return ResponseHandler.generateFailureResponse(HttpStatus.BAD_REQUEST, LanguageUtils.getMessage("message.validation.error"), errors);
+        return ResponseHandler.generateFailureResponse(HttpStatus.BAD_REQUEST, "message.validation.error", errors);
     }
 }

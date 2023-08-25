@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserImageDTO {
-    Long userImageId;
+    Long id;
     String userImageName;
     String userImageFileCode;
 }

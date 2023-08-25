@@ -1,35 +1,43 @@
 package com.example.tiktok.services;
 
 
+import com.example.tiktok.common.ImageFolder;
+import com.example.tiktok.common.UserRole;
 import com.example.tiktok.entities.CustomUserDetails;
+import com.example.tiktok.entities.Image;
+import com.example.tiktok.entities.Role;
 import com.example.tiktok.entities.User;
 import com.example.tiktok.exceptions.CreateFailureException;
 import com.example.tiktok.exceptions.NotFoundException;
 import com.example.tiktok.exceptions.UpdateFailtureException;
+import com.example.tiktok.models.dto.ImageDTO;
+import com.example.tiktok.models.dto.UserImageDTO;
 import com.example.tiktok.models.requests.users.SignUpRequest;
 import com.example.tiktok.models.requests.users.UpdateProfileRequest;
-import com.example.tiktok.models.requests.users.UploadImageRequest;
 import com.example.tiktok.models.responses.UserInformationResponse;
+import com.example.tiktok.models.responses.UserProfileResponse;
+import com.example.tiktok.repositories.FollowersRepository;
 import com.example.tiktok.repositories.UserRepository;
+import com.example.tiktok.utils.AuthUtil;
+import com.example.tiktok.utils.FileUploadUtils;
 import com.example.tiktok.utils.LanguageUtils;
+import com.example.tiktok.utils.TextUtils;
+import com.example.tiktok.utils.mapper.ImageMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -38,10 +46,10 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserImageService userImageService;
+    private FollowersRepository followersRepository;
 
     @Autowired
-    private ModelMapper mapper;
+    private ImageMapper imageMapper;
 
     private static final Logger LOGGER = LogManager.getLogger(UserService.class);
 
@@ -66,6 +74,9 @@ public class UserService implements UserDetailsService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String password = passwordEncoder.encode(user.getPassword());
         user.setPassword(password);
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.builder().id(UserRole.ROLE_CUSTOMER_ID).build());
+        user.setRoles(roles);
         try {
             userRepository.save(user);
         } catch (DataAccessException e) {
@@ -75,45 +86,89 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateProfile(UpdateProfileRequest req, MultipartFile file) throws IOException {
-        User user = req.loadToEntity();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            user.setId(userDetails.getUser().getId());
-        }
+    public void updateProfile(UpdateProfileRequest req) throws IOException {
 
-        userImageService.uploadImage(UploadImageRequest.builder().userId(user.getId()).file(file).build());
+
+        Long currentUserId = AuthUtil.getLoggedUserId();
+
+        ImageDTO imageDTO = FileUploadUtils.saveFile(req.getFile(), ImageFolder.USER_FOLDER);
+        Image image = imageMapper.mapToEntity(imageDTO);
+
         try {
-            User existingUser = userRepository.findById(user.getId())
-                    .orElseThrow(() -> new NotFoundException("User not found"));
+            User existingUser = userRepository.findById(currentUserId)
+                    .orElseThrow(() -> new NotFoundException("message.not.found"));
 
             // Set the new values for the desired fields, including null values
-            existingUser.setUsername(user.getUsername());
-            existingUser.setBio(user.getBio());
-            existingUser.setNickname(user.getNickname());
+            if (!TextUtils.isNullOrEmpty(req.getUsername())) {
+                existingUser.setUsername(req.getUsername());
+            }
+            if (!TextUtils.isNullOrEmpty(req.getBio())) {
+                existingUser.setBio(req.getBio());
+            }
+            if (!TextUtils.isNullOrEmpty(req.getNickname())) {
+                existingUser.setNickname(req.getNickname());
+            }
+            existingUser.setAvatar(image);
 
             // Save the modified entity
             userRepository.save(existingUser);
         } catch (DataAccessException e) {
-            throw new UpdateFailtureException(LanguageUtils.getMessage("message.update.failure"));
+            throw new UpdateFailtureException("message.update.failure");
         }
 
 
     }
 
-    public UserInformationResponse getUserInformation(Long userId) {
-        UserInformationResponse res = new UserInformationResponse();
-        try {
-            List<User> users = userRepository.findByUserId(userId);
-            if (users.size() == 0)
-                throw new NotFoundException("message.not.found");
-            res = mapper.map(users.get(0), UserInformationResponse.class);
+    public UserProfileResponse getUserProfile(Long userId) {
+        Long currentUserId = AuthUtil.getLoggedUserId();
+        User currentUser = User.builder().id(currentUserId).build();
 
-        } catch (DataAccessException e) {
-            LOGGER.error("Error executing service, getUserInformation method: ", e.getMessage());
-            throw new NotFoundException("message.not.found");
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("message.not.found"));
+
+        ImageDTO avatar = null;
+
+        if (existingUser.getAvatar() != null) {
+            avatar = imageMapper.mapToDTO(existingUser.getAvatar());
         }
-        return res;
+
+        return UserProfileResponse.builder()
+                .email(existingUser.getEmail())
+                .bio(existingUser.getBio())
+                .avatar(avatar)
+                .nickname(existingUser.getNickname())
+                .username(existingUser.getUsername())
+                .id(existingUser.getId())
+                .numberOfFollower(followersRepository.countNumberOfFollowerByUserId(userId))
+                .numberOfFollowing(followersRepository.countNumberOfFollowingByUserId(userId))
+                .isFollowed(followersRepository.existsByFromAndToAndDeleted(currentUser, existingUser, false))
+                .build();
+
+    }
+
+    public UserInformationResponse getUserInformation() {
+
+        Long currentUserId = AuthUtil.getLoggedUserId();
+
+
+        User existingUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new NotFoundException("message.not.found"));
+
+        ImageDTO avatar = null;
+
+        if (existingUser.getAvatar() != null) {
+            avatar = imageMapper.mapToDTO(existingUser.getAvatar());
+        }
+
+        return UserInformationResponse.builder()
+                .email(existingUser.getEmail())
+                .bio(existingUser.getBio())
+                .avatar(avatar)
+                .nickname(existingUser.getNickname())
+                .username(existingUser.getUsername())
+                .id(existingUser.getId())
+                .roles(existingUser.getRoles())
+                .build();
+
     }
 }

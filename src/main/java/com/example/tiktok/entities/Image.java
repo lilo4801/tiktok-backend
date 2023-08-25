@@ -6,23 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
+@Entity
+@Table(name = "image")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "roles")
 @Builder
-public class Role {
+public class Image extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, length = 50, unique = true)
+    private String path;
     private String name;
-
-    public Role(String name) {
-        this.name = name;
-    }
+    private String type;
+    private String fileCode;
 }
