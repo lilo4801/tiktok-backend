@@ -647,3 +647,58 @@ org.springframework.context.NoSuchMessageException: No message found under code 
 [INFO] 25-08-2023 14:15:25 [SpringApplicationShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 [INFO] 25-08-2023 14:15:25 [SpringApplicationShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
 [INFO] 25-08-2023 14:15:25 [SpringApplicationShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
+[INFO] 25-08-2023 14:15:48 [main] TiktokApplication - Starting TiktokApplication using Java 1.8.0_191 on LAPTOP-0873F2CN with PID 17052 (E:\Code\java\tiktok\target\classes started by window in E:\Code\java\tiktok)
+[INFO] 25-08-2023 14:15:48 [main] TiktokApplication - The following 1 profile is active: "mysql"
+[INFO] 25-08-2023 14:15:49 [main] RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[INFO] 25-08-2023 14:15:49 [main] RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 115 ms. Found 6 JPA repository interfaces.
+[INFO] 25-08-2023 14:15:49 [main] RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[INFO] 25-08-2023 14:15:49 [main] RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 48 ms. Found 6 JPA repository interfaces.
+[INFO] 25-08-2023 14:15:52 [main] TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO] 25-08-2023 14:15:52 [main] Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO] 25-08-2023 14:15:52 [main] StandardService - Starting service [Tomcat]
+[INFO] 25-08-2023 14:15:52 [main] StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+[INFO] 25-08-2023 14:15:52 [main] [/] - Initializing Spring embedded WebApplicationContext
+[INFO] 25-08-2023 14:15:52 [main] ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4407 ms
+[INFO] 25-08-2023 14:15:53 [main] HikariDataSource - HikariPool-1 - Starting...
+[INFO] 25-08-2023 14:15:54 [main] HikariDataSource - HikariPool-1 - Start completed.
+[INFO] 25-08-2023 14:15:56 [main] LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[WARN] 25-08-2023 14:15:58 [main] JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[INFO] 25-08-2023 14:15:59 [main] DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7d43f1c9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@eddc9bb, org.springframework.security.web.context.SecurityContextPersistenceFilter@574327ed, org.springframework.security.web.header.HeaderWriterFilter@578198d9, org.springframework.security.web.authentication.logout.LogoutFilter@6f4029e9, com.example.tiktok.utils.JwtTokenFilter@4d0abb23, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1b5cf611, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@65da1cbe, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@11e3d08, org.springframework.security.web.session.SessionManagementFilter@58486deb, org.springframework.security.web.access.ExceptionTranslationFilter@3aa1c45, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5feff876]
+[INFO] 25-08-2023 14:15:59 [main] PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO] 25-08-2023 14:16:00 [main] Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO] 25-08-2023 14:16:00 [main] TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO] 25-08-2023 14:16:00 [main] DocumentationPluginsBootstrapper - Context refreshed
+[INFO] 25-08-2023 14:16:00 [main] DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO] 25-08-2023 14:16:00 [main] ApiListingReferenceScanner - Scanning for api listing references
+[INFO] 25-08-2023 14:16:01 [main] TiktokApplication - Started TiktokApplication in 13.922 seconds (JVM running for 16.932)
+[INFO] 25-08-2023 14:16:16 [http-nio-8080-exec-5] [/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO] 25-08-2023 14:16:16 [http-nio-8080-exec-5] DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO] 25-08-2023 14:16:16 [http-nio-8080-exec-5] DispatcherServlet - Completed initialization in 4 ms
+[INFO] 25-08-2023 14:16:17 [http-nio-8080-exec-5] FollowersController - Before executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:16:17 [http-nio-8080-exec-5] FollowersService - Before executing FollowersService service method: follow
+[INFO] 25-08-2023 14:16:17 [http-nio-8080-exec-5] FollowersService - After executing FollowersService service method: follow
+[INFO] 25-08-2023 14:16:17 [http-nio-8080-exec-5] FollowersController - After executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:16:26 [http-nio-8080-exec-1] FollowersController - Before executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:16:26 [http-nio-8080-exec-1] FollowersService - Before executing FollowersService service method: follow
+[INFO] 25-08-2023 14:16:26 [http-nio-8080-exec-1] FollowersService - After executing FollowersService service method: follow
+[INFO] 25-08-2023 14:16:26 [http-nio-8080-exec-1] FollowersController - After executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:17:27 [http-nio-8080-exec-6] AuthController - Before executing AuthController controller method: register
+[INFO] 25-08-2023 14:17:27 [http-nio-8080-exec-6] UserService - Before executing UserService service method: register
+[INFO] 25-08-2023 14:17:28 [http-nio-8080-exec-6] UserService - After executing UserService service method: register
+[INFO] 25-08-2023 14:17:28 [http-nio-8080-exec-6] AuthController - After executing AuthController controller method: register
+[INFO] 25-08-2023 14:17:45 [http-nio-8080-exec-7] FollowersController - Before executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:17:45 [http-nio-8080-exec-7] FollowersService - Before executing FollowersService service method: follow
+[INFO] 25-08-2023 14:17:45 [http-nio-8080-exec-7] FollowersService - After executing FollowersService service method: follow
+[INFO] 25-08-2023 14:17:45 [http-nio-8080-exec-7] FollowersController - After executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:18:06 [http-nio-8080-exec-8] FollowersController - Before executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:18:06 [http-nio-8080-exec-8] FollowersService - Before executing FollowersService service method: follow
+[INFO] 25-08-2023 14:18:06 [http-nio-8080-exec-8] FollowersService - After executing FollowersService service method: follow
+[INFO] 25-08-2023 14:18:06 [http-nio-8080-exec-8] FollowersController - After executing FollowersController controller method: follow
+[INFO] 25-08-2023 14:18:21 [http-nio-8080-exec-9] FollowersController - Before executing FollowersController controller method: getFollowers
+[INFO] 25-08-2023 14:18:21 [http-nio-8080-exec-9] FollowersService - Before executing FollowersService service method: getFollowers
+[INFO] 25-08-2023 14:18:21 [http-nio-8080-exec-9] FollowersService - After executing FollowersService service method: getFollowers
+[INFO] 25-08-2023 14:18:21 [http-nio-8080-exec-9] FollowersController - After executing FollowersController controller method: getFollowers
+[INFO] 25-08-2023 14:18:30 [http-nio-8080-exec-10] FollowersController - Before executing FollowersController controller method: getFollowings
+[INFO] 25-08-2023 14:18:30 [http-nio-8080-exec-10] FollowersService - Before executing FollowersService service method: getFollowings
+[INFO] 25-08-2023 14:18:30 [http-nio-8080-exec-10] FollowersService - After executing FollowersService service method: getFollowings
+[INFO] 25-08-2023 14:18:30 [http-nio-8080-exec-10] FollowersController - After executing FollowersController controller method: getFollowings
